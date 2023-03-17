@@ -16,8 +16,11 @@ gem 'puma', '~> 5.0'
 # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
 # gem 'turbolinks', '~> 5'
 
+# PostgreSQL Driver
+gem 'pg'
+
 # Fast JSON APIs
-gem 'fast_jsonapi'
+gem 'jsonapi-serializer'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.4', require: false
@@ -28,6 +31,8 @@ group :development, :test do
   gem 'pry-rails'
 
   gem 'rspec-rails', '~> 6.0.0'
+
+  gem 'dotenv-rails'
 end
 
 group :development do
