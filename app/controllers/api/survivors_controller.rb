@@ -35,7 +35,7 @@ class Api::SurvivorsController < ApplicationController
 
     params.require(required_params)
 
-    return params.permit(permitted_params.concat(required_params))
+    params.permit(permitted_params.concat(required_params))
   end
 
   def show_params
@@ -43,7 +43,7 @@ class Api::SurvivorsController < ApplicationController
 
     params.require(required_params)
 
-    return params.permit(required_params)
+    params.permit(required_params)
   end
 
   def update_location_params
@@ -51,6 +51,6 @@ class Api::SurvivorsController < ApplicationController
 
     params.require(required_params)
 
-    return params.permit(required_params)
+    params.permit(required_params)
   end
 end

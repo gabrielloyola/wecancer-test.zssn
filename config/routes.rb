@@ -8,7 +8,9 @@ Rails.application.routes.draw do
     end
 
     # Infections
-    resource :infections, only: %i[create]
+    resource :infections do
+      post '/:infected_id/report', action: :report_infected
+    end
   end
 
   root to: redirect('/api-docs')
