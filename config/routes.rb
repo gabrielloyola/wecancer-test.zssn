@@ -1,5 +1,15 @@
 Rails.application.routes.draw do
-  root to: redirect('/api-docs')
+  namespace :api do
+    # Survivor
+    resource :survivors, only: %i[create] do
+      get '/', action: :index
+      get '/:survivor_id', action: :show
+      patch '/:survivor_id/location', action: :update_location
+    end
 
-  # User
+    # Infections
+    resource :infections, only: %i[create]
+  end
+
+  root to: redirect('/api-docs')
 end
