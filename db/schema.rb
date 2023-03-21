@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_03_20_113349) do
+ActiveRecord::Schema.define(version: 2023_03_20_152327) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,6 +23,24 @@ ActiveRecord::Schema.define(version: 2023_03_20_113349) do
     t.index ["infected_id"], name: "index_infection_reports_on_infected_id"
     t.index ["reporter_id", "infected_id"], name: "index_infection_reports_on_reporter_id_and_infected_id"
     t.index ["reporter_id"], name: "index_infection_reports_on_reporter_id"
+  end
+
+  create_table "inventory_items", force: :cascade do |t|
+    t.bigint "survivor_id", null: false
+    t.bigint "item_id", null: false
+    t.integer "quantity", default: 0, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["item_id"], name: "index_inventory_items_on_item_id"
+    t.index ["survivor_id"], name: "index_inventory_items_on_survivor_id"
+  end
+
+  create_table "items", force: :cascade do |t|
+    t.string "name", null: false
+    t.integer "value", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["name"], name: "index_items_on_name"
   end
 
   create_table "survivors", force: :cascade do |t|
@@ -38,4 +56,6 @@ ActiveRecord::Schema.define(version: 2023_03_20_113349) do
 
   add_foreign_key "infection_reports", "survivors", column: "infected_id"
   add_foreign_key "infection_reports", "survivors", column: "reporter_id"
+  add_foreign_key "inventory_items", "items"
+  add_foreign_key "inventory_items", "survivors"
 end

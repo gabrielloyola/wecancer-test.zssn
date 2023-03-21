@@ -11,6 +11,7 @@ RSpec.describe Survivor, type: :model do
 
   describe "Associations" do
     it { should have_many(:infection_reports).inverse_of(:infected) }
+    it { should have_many(:inventory_items) }
   end
 
   describe "#flag_infection" do
