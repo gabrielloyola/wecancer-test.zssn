@@ -8,4 +8,6 @@ class SurvivorSerializer
 
     "#{object.last_lat}, #{object.last_long}"
   end
+
+  has_many :infection_reports
 end
