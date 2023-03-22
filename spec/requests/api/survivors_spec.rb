@@ -137,6 +137,7 @@ RSpec.describe 'Api::Survivors', type: :request do
 
   describe 'PATCH /api/survivors/:survivor_id/location' do
     let!(:survivor) { create(:survivor) }
+    let(:request_call) { patch "/api/survivors/#{survivor_id}/location", params: params }
 
     context 'when the parameters are correct' do
       let(:survivor_id) { survivor.id }
@@ -147,7 +148,7 @@ RSpec.describe 'Api::Survivors', type: :request do
         }
       end
 
-      before { patch "/api/survivors/#{survivor_id}/location", params: params }
+      before { request_call }
 
       it 'returns success' do
         expect(response).to be_successful
@@ -163,18 +164,16 @@ RSpec.describe 'Api::Survivors', type: :request do
         }
       end
 
-      before { patch "/api/survivors/#{survivor_id}/location", params: params }
+      before { request_call }
 
       it 'returns unprocessable entity error' do
-
         expect(response.status).to eq(422)
       end
     end
 
     shared_examples 'without any required parameter' do
       it 'fails with unprocessable_entity' do
-        expect { patch "/api/survivors/#{survivor_id}/location", params: params }
-          .to raise_error(ActionController::ParameterMissing)
+        expect { request_call }.to raise_error(ActionController::ParameterMissing)
       end
     end
 

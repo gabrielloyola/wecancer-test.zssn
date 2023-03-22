@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :item do
-    name { ['Água', 'Comida', 'Remédio', 'Munição'].sample }
+    name { Faker::Name.unique.name }
     value { Faker::Number.within(range: 1..4)  }
   end
 end

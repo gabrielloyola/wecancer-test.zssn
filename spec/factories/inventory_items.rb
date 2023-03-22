@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :inventory_item do
-    survivor { build(:survivor) }
-    item { build(:item) }
+    survivor { create(:survivor) }
+    item { create(:item) }
     quantity { 0 }
 
     trait :one do

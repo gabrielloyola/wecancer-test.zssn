@@ -15,5 +15,15 @@ FactoryBot.define do
     trait :infected do
       infected { true }
     end
+
+    trait :with_inventory_items do
+      transient do
+        item_quantity { 0 }
+      end
+
+      after(:create) do |survivor, evaluator|
+        create_pair(:inventory_item, survivor: survivor, quantity: evaluator.item_quantity)
+      end
+    end
   end
 end

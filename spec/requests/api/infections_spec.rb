@@ -25,6 +25,7 @@ RSpec.describe "Api::Infections", type: :request do
     shared_examples 'don\'t register the infection report' do
       it 'returns unprocessable entity with an error message' do
         expect { request_call }.not_to change { infected.infection_reports.count }
+        expect(response).to have_http_status(422)
         expect(json_response['message']).to eq(expected_error_message)
       end
     end

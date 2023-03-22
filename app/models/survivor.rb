@@ -1,6 +1,9 @@
 class Survivor < ApplicationRecord
-  has_many :infection_reports, inverse_of: :infected, foreign_key: 'infected_id'
-  has_many :inventory_items
+  has_many :infection_reports,
+    inverse_of: :infected,
+    foreign_key: 'infected_id',
+    dependent: :destroy
+  has_many :inventory_items, dependent: :destroy
 
   validates_presence_of :name, :age, :gender
 
