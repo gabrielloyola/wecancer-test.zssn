@@ -5,7 +5,7 @@ module InventoryServices
     def call
       return [nil, 'This survivor is infected!'] if survivor.infected?
 
-      return remove_item! if inventory_item.quantity.positive?
+      return remove_items! if is_quantity_enough?
 
       [nil, 'Can\'t remove this item because you don\'t have any of it']
     rescue ActiveRecord::RecordNotFound, ActiveRecord::RecordInvalid => e
@@ -14,10 +14,14 @@ module InventoryServices
 
     private
 
-    def remove_item!
-      inventory_item.update!(quantity: inventory_item.quantity - 1)
+    def remove_items!
+      inventory_item.update!(quantity: inventory_item.quantity - quantity_to_remove.to_i)
 
       inventory_item
+    end
+
+    def is_quantity_enough?
+      !(inventory_item.quantity - quantity_to_remove.to_i).negative?
     end
 
     def item
@@ -30,6 +34,11 @@ module InventoryServices
 
     def survivor
       @survivor ||= Survivor.find(@survivor_id)
+    end
+
+    def quantity_to_remove
+      # Take from parameter or use 1 as default
+      @quantity ||= 1
     end
   end
 end

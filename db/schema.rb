@@ -44,9 +44,9 @@ ActiveRecord::Schema.define(version: 2023_03_20_152327) do
   end
 
   create_table "survivors", force: :cascade do |t|
-    t.string "name"
-    t.integer "age"
-    t.string "gender"
+    t.string "name", null: false
+    t.integer "age", null: false
+    t.string "gender", null: false
     t.float "last_lat"
     t.float "last_long"
     t.datetime "created_at", precision: 6, null: false

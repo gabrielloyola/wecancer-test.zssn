@@ -15,7 +15,7 @@ module InventoryServices
     private
 
     def add_item!
-      inventory_item.update!(quantity: inventory_item.quantity + 1)
+      result = inventory_item.update!(quantity: inventory_item.quantity + quantity_to_add.to_i)
     end
 
     def item
@@ -28,6 +28,11 @@ module InventoryServices
 
     def survivor
       @survivor ||= Survivor.find(@survivor_id)
+    end
+
+    def quantity_to_add
+      # Take from parameter or use 1 as default
+      @quantity ||= 1
     end
   end
 end

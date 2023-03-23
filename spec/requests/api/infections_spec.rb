@@ -10,10 +10,10 @@ RSpec.describe "Api::Infections", type: :request do
 
   describe "POST /api/infections/:infected_id/report" do
     let(:survivors) { create_list(:survivor, 5) }
+    let(:reporter) { survivors.first }
+    let(:infected) { survivors.last }
 
     context 'when the reporter indicates someone valid for the first time' do
-      let(:reporter) { survivors.first }
-      let(:infected) { survivors.last }
 
       it 'register the infection' do
         expect { request_call }.to change { infected.infection_reports.count }.by(1)
@@ -31,8 +31,6 @@ RSpec.describe "Api::Infections", type: :request do
     end
 
     context 'when the reporter already indicated that infected' do
-      let(:reporter) { survivors.first }
-      let(:infected) { survivors.last }
       let(:expected_error_message) { 'Validation failed: Infected has already been taken' }
 
       before { create(:infection_report, reporter_id: reporter.id, infected_id: infected.id) }
@@ -41,8 +39,6 @@ RSpec.describe "Api::Infections", type: :request do
     end
 
     context 'when the infected_id is not valid' do
-      let(:reporter) { survivors.first }
-      let(:infected) { survivors.last }
       let(:wrong_id) { infected.id + 100 }
       let(:expected_error_message) { "Couldn't find Survivor with 'id'=#{wrong_id}" }
 
@@ -52,8 +48,6 @@ RSpec.describe "Api::Infections", type: :request do
     end
 
     context 'when the reporter_id is not valid' do
-      let(:reporter) { survivors.first }
-      let(:infected) { survivors.last }
       let(:wrong_id) { reporter.id + 100 }
       let(:expected_error_message) { "Couldn't find Survivor with 'id'=#{wrong_id}" }
 
@@ -62,6 +56,15 @@ RSpec.describe "Api::Infections", type: :request do
           reporter_id: wrong_id
         }
       end
+
+      it_behaves_like 'don\'t register the infection report'
+    end
+
+    context 'when the reporter is infected' do
+      let(:wrong_id) { reporter.id + 100 }
+      let(:expected_error_message) { 'Survivor can\'t be reported.' }
+
+      before { reporter.update!(infected: true) }
 
       it_behaves_like 'don\'t register the infection report'
     end

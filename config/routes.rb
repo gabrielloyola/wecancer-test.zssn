@@ -8,14 +8,15 @@ Rails.application.routes.draw do
     end
 
     # Infections
-    resource :infections do
+    namespace :infections do
       post '/:infected_id/report', action: :report_infected
     end
 
     # Inventory
-    resource :inventory do
+    namespace :inventories do
       put '/:survivor_id/add', action: :add_item
       put '/:survivor_id/remove', action: :remove_item
+      post '/exchange', action: :exchange_items
     end
   end
 
