@@ -1,80 +1,301 @@
 FORMAT: 1A
-HOST: https://polls.apiblueprint.org/
+HOST: http://localhost:3000/api
 
 # zssn-api
 
-Polls is a simple API allowing consumers to view polls and vote in them.
+## Survivors [/survivors]
 
-## Questions Collection [/questions]
-
-### List All Questions [GET]
+### List All Survivors [GET]
 
 + Response 200 (application/json)
 
-        [
-            {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
-                    {
-                        "choice": "Swift",
-                        "votes": 2048
-                    }, {
-                        "choice": "Python",
-                        "votes": 1024
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 512
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 256
+        {
+            "data": [
+                {
+                    "id": "2",
+                    "type": "survivor",
+                    "attributes": {
+                        "name": "Maya",
+                        "age": 26,
+                        "gender": "female",
+                        "last_location": "67.81723, 100.72461"
+                    },
+                    "relationships": {
+                        "infection_reports": {
+                            "data": []
+                        }
                     }
-                ]
-            }
-        ]
+                },
+                {
+                    "id": "3",
+                    "type": "survivor",
+                    "attributes": {
+                        "name": "Michone",
+                        "age": 26,
+                        "gender": "female",
+                        "last_location": "42.709752, -95.6243"
+                    },
+                    "relationships": {
+                        "infection_reports": {
+                        "data": []
+                        }
+                    }
+                },
+                {
+                    "id": "1",
+                    "type": "survivor",
+                    "attributes": {
+                        "name": "John",
+                        "age": 17,
+                        "gender": "male",
+                        "last_location": "42.709752, -95.6243"
+                    },
+                    "relationships": {
+                        "infection_reports": {
+                        "data": []
+                        }
+                    }
+                }
+            ]
+        }
 
-### Create a New Question [POST]
+### Create a New Survivor [POST]
 
-You may create your own question using this action. It takes a JSON
-object containing a question and a collection of answers in the
-form of choices.
+Parameters
++ name (string, required)
++ age (integer, required)
++ gender (string, required)
++ last_lat (float, optional)
++ last_long (float, optional)
+
 
 + Request (application/json)
 
         {
-            "question": "Favourite programming language?",
-            "choices": [
-                "Swift",
-                "Python",
-                "Objective-C",
-                "Ruby"
-            ]
+            "name": "Michone",
+            "age": 26,
+            "gender": "female",
+            "last_lat": 42.709752,
+            "last_long": -95.624300
         }
 
 + Response 201 (application/json)
 
-    + Headers
-
-            Location: /questions/2
-
     + Body
 
             {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
-                    {
-                        "choice": "Swift",
-                        "votes": 0
-                    }, {
-                        "choice": "Python",
-                        "votes": 0
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 0
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 0
+                "data": {
+                    "id": "3",
+                    "type": "survivor",
+                    "attributes": {
+                        "name": "Michone",
+                        "age": 26,
+                        "gender": "female",
+                        "last_location": "42.709752, -95.6243"
+                    },
+                    "relationships": {
+                        "infection_reports": {
+                            "data": []
+                        }
                     }
-                ]
+                }
             }
+
++ Response 400 (text/html)
+
+## Survivor by ID [/survivors/:id]
+
+### Get Survivor By ID [GET]
+
++ Response 200 (application/json)
+
+        {
+            "data": {
+                "id": "1",
+                "type": "survivor",
+                "attributes": {
+                    "name": "John",
+                    "age": 17,
+                    "gender": "male",
+                    "last_location": "42.709752, -95.6243"
+                },
+                "relationships": {
+                    "infection_reports": {
+                        "data": []
+                    }
+                }
+            }
+        }
+
++ Response 404 (application/json)
+
+## Survivor Location [/survivors/:id/location]
+
+### Update Survivor Location [PATCH]
+
+Parameters
++ last_lat (float, required)
++ last_long (float, required)
+
++ Request (application/json)
+
+        {
+            "last_lat": 42.709752,
+            "last_long": -95.624300
+        }
+
+
++ Response 204 (application/json)
+
++ Response 404 (application/json)
+
+
+
+## Report Infection [/infections/:infected_id/report]
+
+### Report Someone's Infection [POST]
+
+Parameters
++ reporter_id (integer, required)
+
++ Request (application/json)
+
+        {
+            "reporter_id": 911
+        }
+
+
++ Response 204 (application/json)
+
++ Response 422 (application/json)
+
+
+## Add Item [/inventories/:survivor_id/add]
+
+### Add Item To Inventory [PUT]
+
+Parameters
++ item_name (string, required)
++ quantity (integer, optional, default: 1)
+
++ Request (application/json)
+
+        {
+            "item_name": "Remédio",
+            "quantity": 1
+        }
+
+
++ Response 200 (application/json)
+
+        {
+            "data":{
+                "id":"7",
+                "type":"inventory_item",
+                "attributes":{
+                    "quantity":4
+                },
+                "relationships":{
+                    "item":{
+                        "data":{
+                            "id":"3",
+                            "type":"item"
+                        }
+                    },
+                    "survivor":{
+                        "data":{
+                            "id":"2",
+                            "type":"survivor"
+                        }
+                    }
+                }
+            }
+        }
+
++ Response 422 (application/json)
+
+        {
+            "message": "Couldn't find Item"
+        }
+
+
+## Remove Item [/inventories/:survivor_id/remove]
+
+### Remove Item To Inventory [PUT]
+
+Parameters
++ item_name (string, required)
++ quantity (integer, optional, default: 1)
+
++ Request (application/json)
+
+        {
+            "item_name": "Remédio",
+            "quantity": 1
+        }
+
+
++ Response 200 (application/json)
+
+        {
+            "data":{
+                "id":"7",
+                "type":"inventory_item",
+                "attributes":{
+                    "quantity": 3
+                },
+                "relationships":{
+                    "item":{
+                        "data":{
+                            "id":"3",
+                            "type":"item"
+                        }
+                    },
+                    "survivor":{
+                        "data":{
+                            "id":"2",
+                            "type":"survivor"
+                        }
+                    }
+                }
+            }
+        }
+
++ Response 422 (application/json)
+
+        {
+            "message": "Can't remove this item because you don't have any of it"
+        }
+
+
++ Response 204 (application/json)
+
+
++ Response 422 (application/json)
+
+        {
+            "message": [
+                "Insuficient resources for this exchange.",
+                "Bag points doesn't match. Bag #1: 20 - Bag #2: 4"
+            ]
+        }
+
+
+
+## Statistics [/statistics]
+
+### Get Statistics Report [GET]
+
++ Response 200 (application/json)
+
+        {
+            "infected_percentage": 12.5,
+            "not_infected_percentage": 87.5,
+            "item_averages": {
+                "Comida": 2.4285714285714284,
+                "Munição": 17.428571428571427,
+                "Remédio": 1.7142857142857142,
+                "Água": 10.285714285714286
+            },
+            "lost_infected_points": 348
+        }
