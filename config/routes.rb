@@ -18,6 +18,9 @@ Rails.application.routes.draw do
       put '/:survivor_id/remove', action: :remove_item
       post '/exchange', action: :exchange_items
     end
+
+    # Reports
+    get '/statistics', to: 'statistics#generate'
   end
 
   root to: redirect('/api-docs')

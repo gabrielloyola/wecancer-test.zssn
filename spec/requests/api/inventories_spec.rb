@@ -92,7 +92,7 @@ RSpec.describe 'Api::Inventories', type: :request do
     context 'when item is not findable by item_name parameter' do
       let(:item_name) { 'Ice cream' }
 
-      it_behaves_like 'failing to change items quantity', 2
+      it_behaves_like 'failing to change items quantity', 1
     end
 
     context 'when the survivor is infected' do
@@ -153,9 +153,7 @@ RSpec.describe 'Api::Inventories', type: :request do
     context 'when one of them is infected' do
       let(:expected_error) { 'One of the survivors is infected. Aborting.' }
 
-      before do
-        survivors.first.update!(infected: true)
-      end
+      before { survivors.first.update!(infected: true) }
 
       it_behaves_like 'not possible to do the exchange'
     end

@@ -22,7 +22,7 @@ FactoryBot.define do
       end
 
       after(:create) do |survivor, evaluator|
-        create_pair(:inventory_item, survivor: survivor, quantity: evaluator.item_quantity)
+        create(:inventory_item, survivor: survivor, quantity: evaluator.item_quantity)
       end
     end
   end
